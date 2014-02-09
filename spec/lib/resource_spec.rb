@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe WebServer::Resource do
+  let(:mimes) { double(WebServer::MimeTypes) }
+
   def conf_double(options={})
     double(WebServer::HttpdConf, {
       document_root: '/doc_root',
@@ -23,12 +25,11 @@ describe WebServer::Resource do
         object.stub(:script_aliases).and_return []
         object
       end
-
       let(:request) { request_double(uri: '/a/resource') }
 
       it 'should return the absolute path to the file' do
         expected_path = "#{conf.document_root}#{request.uri}/#{conf.directory_index}"
-        expect(WebServer::Resource.new(request, conf).resolve).to eq expected_path
+        expect(WebServer::Resource.new(request, conf, mimes).resolve).to eq expected_path
       end
     end
 
@@ -44,7 +45,7 @@ describe WebServer::Resource do
 
       it 'should return the absolute path to the file' do
         expected_path = '/doc_root/tt/tt/tt/resource.php'
-        expect(WebServer::Resource.new(request, conf).resolve).to eq expected_path
+        expect(WebServer::Resource.new(request, conf, mimes).resolve).to eq expected_path
       end
     end
 
@@ -59,7 +60,7 @@ describe WebServer::Resource do
 
       it 'should return the absolute path to the file' do
         expected_path = '/doc_root/bb/bb/bb/resource/index.html'
-        expect(WebServer::Resource.new(request, conf).resolve).to eq expected_path
+        expect(WebServer::Resource.new(request, conf, mimes).resolve).to eq expected_path
       end
     end
   end
@@ -70,7 +71,7 @@ describe WebServer::Resource do
       let(:request) { request_double(uri: '/ss/ss/resource') }
 
       it 'returns true' do
-        expect(WebServer::Resource.new(request, conf).script_aliased?).to be_true
+        expect(WebServer::Resource.new(request, conf, mimes).script_aliased?).to be_true
       end
     end
 
@@ -79,7 +80,7 @@ describe WebServer::Resource do
       let(:request) { request_double(uri: '/a/resource') }
 
       it 'returns false for a non script aliased path' do
-        expect(WebServer::Resource.new(request, conf).script_aliased?).to eq false
+        expect(WebServer::Resource.new(request, conf, mimes).script_aliased?).to eq false
       end
     end
   end
