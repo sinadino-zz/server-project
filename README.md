@@ -26,3 +26,22 @@ To run the web server (nothing will happen until you implement...):
 ```
 ruby web_server.rb
 ```
+
+## Creating Branches
+
+Create a named branch, typically named after the feature you are working
+on.
+```
+git branch request
+```
+
+Switch to the branch in order to begin your work.
+```
+git checkout request
+```
+
+Let GitHub know you would like to have a remote branch that mirrors the
+work you have done in the local branch.
+```
+git push --set-upstream origin request
+```
