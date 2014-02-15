@@ -72,6 +72,3 @@ In order to commit *ALL* (-a) your changes, with a commit message (-m):
 ```
 git commit -am "The commit message"
 ```
-
-An important change was made to the file.
-
