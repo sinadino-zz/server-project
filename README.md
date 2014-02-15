@@ -45,3 +45,30 @@ work you have done in the local branch.
 ```
 git push --set-upstream origin request
 ```
+
+## Managing Your Branches
+
+To see the status of your current branch:
+```
+git status
+```
+
+In order to make sure that you have the most recent copy of the origin
+(the copy on Github), you pull:
+```
+git pull
+```
+
+In order to add *ALL* changes into your current branch:
+```
+git add . 
+```
+In order to add a specific file into your current branch:
+```
+git add filename
+```
+
+In order to commit *ALL* (-a) your changes, with a commit message (-m):
+```
+git commit -am "The commit message"
+```
