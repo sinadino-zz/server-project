@@ -30,30 +30,5 @@ module WebServer
         Response::ServerError.new(resource, exception: error_object)
       end
     end
-
-    # Provides the base functionality for all HTTP Responses 
-    # (This allows us to inherit basic functionality in derived responses
-    # to handle response code specific behavior)
-    class Base
-      attr_reader :version, :code, :body
-
-      def initialize(resource, options={})
-      end
-
-      def to_s
-      end
-
-      def message
-      end
-
-      def content_length
-      end
-    end
-
-    # Class to handle 500 errors
-    class ServerError < Base
-      def initialize(resource, options={})
-      end
-    end
   end
 end
