@@ -22,12 +22,12 @@ module WebServer
     end
 
     module Factory
-      def self.from_request(request)
-        Response::Base.new(request)
+      def self.create(resource)
+        Response::Base.new(resource)
       end
 
-      def self.error(request, error_object)
-        Response::ServerError.new(request, exception: error_object)
+      def self.error(resource, error_object)
+        Response::ServerError.new(resource, exception: error_object)
       end
     end
 
@@ -37,7 +37,7 @@ module WebServer
     class Base
       attr_reader :version, :code, :body
 
-      def initialize(request, options={})
+      def initialize(resource, options={})
       end
 
       def to_s
@@ -52,7 +52,7 @@ module WebServer
 
     # Class to handle 500 errors
     class ServerError < Base
-      def initialize(request, options={})
+      def initialize(resource, options={})
       end
     end
   end
