@@ -29,6 +29,11 @@ ruby web_server.rb
 
 ## Creating Branches
 
+Forget a command? Try
+```
+git help
+```
+
 Create a named branch, typically named after the feature you are working
 on.
 ```
