@@ -26,6 +26,10 @@ module WebServer
     def log_file
     end
 
+    # Returns the name of the AccessFile 
+    def access_file_name
+    end
+
     # Returns an array of ScriptAlias directories
     def script_aliases
     end
