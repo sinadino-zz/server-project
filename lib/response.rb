@@ -3,6 +3,7 @@ module WebServer
   module Response
     DEFAULT_HTTP_VERSION = 'HTTP/1.1'
 
+
     RESPONSE_CODES = {
       200 => 'OK',
       201 => 'Successfully Created',
@@ -14,6 +15,13 @@ module WebServer
       500 => 'Internal Server Error'
     }
 
+      #trying to solve uninitialized constant WebServer::Response::Base 
+    class Base 
+      def initialize 
+      end
+    end
+    
+      
     def self.default_headers
       {
         'Date' => Time.now.strftime('%a, %e %b %Y %H:%M:%S %Z'),

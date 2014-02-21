@@ -6,9 +6,17 @@ module WebServer
     
     def initialize(options={})
         #trying to make it pass
+        @conf_file = HttpdConf.new('httpd.conf')
 
-        fileObj = File.new( "/home/sinadino/rails_projects/server-project/spec/fixtures/httpd.conf", "r")
-        @http_file = fileObj
+        @conf_file_path = File.new( "/home/sinadino/rails_projects/server-project/spec/fixtures/httpd.conf", "r")
+        
+        @options = ("configuration_directory: FIXTURES_DIRECTORY, conf_file: conf_file") 
+
+        @httpd_file = WebServer::HttpdConf.new("options")
+
+         #trying to solve uninitialized constant WebServer::Response::Base 
+        
+        @response =  WebServer::Response::Base.new("options")
 
     end
 
