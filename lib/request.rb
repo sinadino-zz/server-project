@@ -5,8 +5,11 @@ module WebServer
 
     # Request creation receives a reference to the socket over which
     # the client has connected
-    def initialize(socket)
+    def initialize(io, request)
       # Perform any setup, then parse the request
+      @io = io
+      @request = request
+      
     end
 
     # This method is purely for the purpose of debugging.
