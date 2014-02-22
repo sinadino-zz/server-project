@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'lib/config/httpd_conf'
 
 describe WebServer::HttpdConf do
   let(:conf_file) { 'httpd.conf' }
