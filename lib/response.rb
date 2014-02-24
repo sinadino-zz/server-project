@@ -1,4 +1,5 @@
-# This class is a work in progress
+require_relative 'response/base'
+
 module WebServer
   module Response
     DEFAULT_HTTP_VERSION = 'HTTP/1.1'
