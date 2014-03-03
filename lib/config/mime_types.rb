@@ -3,25 +3,33 @@ require_relative 'configuration'
 # Parses, stores and exposes the values from the mime.types file
 module WebServer
   class MimeTypes < Configuration
-    def initialize(options={})
-
-    	#attr_accessor :mime_file, :mime_file_path, :options, :mime_types
-
-    	@mime_file_path = File.new("/home/sinadino/rails_projects/server-project/spec/fixtures/mime.types", "r")
-
-    end
 
     
-    # Returns the mime type for the specified extension
-    def for_extension(extension)
-    	
-    	if extension == 'png'
-    		return 'image/png'
-    	elsif extension  == 'jpeg' || 'jpg' || 'jpe'
-    		return 'image/jpeg'
-    	end
-    	
+
+    def initialize(options={})
+      # extract configuration options from options hash, or revert to defaults
+      rel_dir = options[:configuration_directory] ? options[:configuration_directory] : './config'
+      rel_file = (options[:mime_file].nil?) ? 'mime.types' : options[:mime_file]
+      @config_file = File.new(File.expand_path(rel_dir + '/' + rel_file), 'r')
     end
+    #find me the mime type
+    def for_extension(extension)
+      
+      # open file for reading
+      File.open(File.expand_path(@config_file)) do |file|
+
+        file.each_line do |linefull|
+          line = linefull.split 
+          line.each_with_index do |item, index|
+            if (index > 0 && item == extension)
+              return line[0]
+            end
+          end
+        end
+      end
+        return nil # in case nothing is found
+    end
+  end
 end
 
-end
+
