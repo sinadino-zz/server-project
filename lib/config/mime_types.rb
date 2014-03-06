@@ -4,32 +4,50 @@ require_relative 'configuration'
 module WebServer
   class MimeTypes < Configuration
 
-    
+    attr_accessor :the_file
+
 
     def initialize(options={})
-      # extract configuration options from options hash, or revert to defaults
-      rel_dir = options[:configuration_directory] ? options[:configuration_directory] : './config'
-      rel_file = (options[:mime_file].nil?) ? 'mime.types' : options[:mime_file]
-      @config_file = File.new(File.expand_path(rel_dir + '/' + rel_file), 'r')
-    end
-    #find me the mime type
-    def for_extension(extension)
-      
-      # open file for reading
-      File.open(File.expand_path(@config_file)) do |file|
+      super options
 
-        file.each_line do |linefull|
-          line = linefull.split 
-          line.each_with_index do |item, index|
-            if (index > 0 && item == extension)
-              return line[0]
-            end
-          end
+      @mime_file = options[:mime_file]
+      file_name = File.join @configuration_directory, @mime_file
+
+      @the_file = File.new(file_name, "r")
+    end
+    
+    # Returns the mime type for the specified extension
+    def for_extension(extension)
+
+      file_content = File.readlines @the_file
+
+      file_content.each do |line|
+        if (line.include? extension)
+          a = line.split " "
+          return a[0]
         end
       end
-        return nil # in case nothing is found
+
     end
   end
 end
 
+=begin
+FIXTURES_DIRECTORY = File.join File.dirname(__FILE__), '../../config'
+puts FIXTURES_DIRECTORY
+#puts Dir.entries FIXTURES_DIRECTORY
 
+var = WebServer::MimeTypes.new ( { :configuration_directory => FIXTURES_DIRECTORY, :mime_file => 'mime.types' } )
+puts var.for_extension("png")
+puts var.for_extension("jpeg")
+puts var.for_extension("jpg")
+puts var.for_extension("jpe")
+#var.mine_type_file.readlines.each do  |line|
+#    if (line.include? "jpg")
+#      a = line.split " "
+#      puts a[0]
+#    end
+#  end
+=end
+
+#var = WebServer::MimeTypes.new ( { :configuration_directory => FIXTURES_DIRECTORY, :mime_file => 'mime.types' } )

@@ -1,8 +1,10 @@
+# This class should be used to encapuslate the functionality 
+# necessary to open and parse configuration files. See
+# HttpdConf and MimeTypes, both derived from this parent class.
 module WebServer
   class Configuration
-     
-
-      attr_accessor :config_file
-   end
+    def initialize(options={})
+      @configuration_directory = options[:configuration_directory]
+    end
+  end
 end
-

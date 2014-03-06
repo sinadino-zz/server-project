@@ -5,7 +5,11 @@ module WebServer
     # you may want to specify.  I include the option :echo to 
     # allow me to decide if I want my server to print out log
     # messages as they get generated
+
+    attr_accessor :log_file_path
+
     def initialize(log_file_path, options={})
+      @log_file_path = log_file_path
     end
 
     # Log a message using the information from Request and 

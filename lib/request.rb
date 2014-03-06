@@ -1,63 +1,81 @@
 # The Request class encapsulates the parsing of an HTTP Request
+
+require 'socket'
+require 'uri'
+
+require_relative '../lib/config/httpd_conf'
+require_relative '../lib/request'
+require_relative '../lib/response'
+
+
 module WebServer
   class Request
+    attr_accessor :http_method, :uri, :version, :headers, :body, :params, :socket
 
-    DEFAULT_DIR = './spec/fixtures'
-
-    attr_accessor :http_method, :uri, :version, :headers, :body, :params
+    attr_accessor :http_methods
 
     # Request creation receives a reference to the socket over which
     # the client has connected
-    def initialize(options={})
-      # Perform any setup, then parse the request
-      @io = File.new("#{DEFAULT_DIR}/basic_get.txt", 'r')
-      #@request = Webserver::Request.new(io)
-
-    
-
-   
-
-    def method_parser 
-      return get_value_parsed('http_method')
-    end
-
-    def uri_parser
-      return get_value_parsed('uri')
-    end
-
-    def http_version
-      return get_value_parsed('HTTP/1.1')
-    end
-
-    def header_parser
-      return get_value_parsed(['HOST'])
-    end
-
-    def env_type
-      return get_value_parsed('CONTENT_LENGTH ')
-    end
-
-    def body_parser
-      return get_value_parsed('body')
-    end
-
-    def query_parser
-      return get_value_parsed('param1')
+    def initialize(socket)
+      @socket = socket
+      @http_methods = [ 'GET', 'POST', 'PUT', 'HEAD']
+      @headers = {}
+      @params = {}
+      @body = ""
+      parse
     end
 
 
-    def get_value_parsed(key)
-        @io.each do |line|
-          line = line.split 
-           return (line[1]).rchomp('"').chomp('"') unless (line[0]!= key)
-           #unless not Found line for this key
-            
-        end
+
+    # I've added this as a convenience method, see TODO (This is called from the logger
+    # to obtain information during server logging)
+    def user_id
+      # TODO: This is the userid of the person requesting the document as determined by 
+      # HTTP authentication. The same value is typically provided to CGI scripts in the 
+      # REMOTE_USER environment variable. If the status code for the request (see below) 
+      # is 401, then this value should not be trusted because the user is not yet authenticated.
+      '-'
+    end
+
+    # Parse the request from the socket - Note that this method takes no
+    # parameters
+    def parse
+
+      @headers['CONTENT_LENGTH'] = 0
+
+      while line = @socket.gets
+        break if line == "\r\n"
+        parse_header line
       end
-  end
+
+    end
 
 
 
+    def parse_header(header_line)
+
+      split_line = header_line.split " "
+
+      if (@http_methods.include? split_line[0])
+        @http_method = split_line[0]
+
+        uri = URI(split_line[1])
+        @uri = uri.path
+
+
+        uri.query.split("&").each do |param|
+          param = param.split("=")
+          @params[param[0]] = param[1]
+        end unless uri.query == nil
+
+        @version = split_line[2]
+      elsif split_line[0] == "Host:"
+        headers['HOST'] = split_line[1]
+      elsif split_line[0] == "Content-Length:"
+        @headers['CONTENT_LENGTH'] = split_line[1]
+      end
+
+    end
 
     # This method is purely for the purpose of debugging.
     def to_s
@@ -77,50 +95,21 @@ module WebServer
 
       output += "--------------------------------\n"
 
-      output
-    end
-
-    # I've added this as a convenience method, see TODO (This is called from the logger
-    # to obtain information during server logging)
-    def user_id
-      # TODO: This is the userid of the person requesting the document as determined by 
-      # HTTP authentication. The same value is typically provided to CGI scripts in the 
-      # REMOTE_USER environment variable. If the status code for the request (see below) 
-      # is 401, then this value should not be trusted because the user is not yet authenticated.
-      '-'
-    end
-  end
-end
-
-class String
-  
-      def rchomp(sep = $/)
-        self.start_with?(sep) ? self[sep.size..-1] : self
-      end
-  end
-
-=begin
-    # Parse the request from the socket - Note that this method takes no
-    # parameters
-    def parses
-    end
-
-    # The following lines provide a suggestion for implementation - feel free
-    # to erase and create your own...
-    def next_line
-    end
-
-    def parse_request_line
-    end
-
-    def parse_header(header_line)
+      puts output
     end
 
     def parse_body(body_line)
+      #@body << body_line.gsub("\n",'')
     end
 
     def parse_params
     end
+  end
+end
 
-=end
- 
+#FIXTURES_DIRECTORY = File.join File.dirname(__FILE__), '../spec/fixtures'
+#
+#file =  File.new("#{FIXTURES_DIRECTORY}/basic_get.txt", 'r')
+#
+#abc = WebServer::Request.new (file)
+#puts abc.to_s
