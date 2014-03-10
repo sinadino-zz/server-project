@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CSC 667 Web Server Project
 
 I'm currently writing the project so it's in a constant state of change.  The master branch 
@@ -77,3 +78,9 @@ In order to commit *ALL* (-a) your changes, with a commit message (-m):
 ```
 git commit -am "The commit message"
 ```
+=======
+server-project
+==============
+
+building a ruby web server from the ground up
+>>>>>>> 27ddcf25fb066576dd2769fb4e7c3ddae810ee49

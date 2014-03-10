@@ -1,2 +1,23 @@
+<<<<<<< HEAD
 logs/
 *.swp
+=======
+*.gem
+*.rbc
+.bundle
+.config
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+
+# YARD artifacts
+.yardoc
+_yardoc
+doc/
+>>>>>>> 27ddcf25fb066576dd2769fb4e7c3ddae810ee49
