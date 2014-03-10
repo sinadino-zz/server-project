@@ -1,3 +1,4 @@
+
 module WebServer
   class Resource
     attr_reader :request, :conf, :mimes
