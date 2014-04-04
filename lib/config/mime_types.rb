@@ -5,7 +5,7 @@ module WebServer
   class MimeTypes < Configuration
     def initialize(options={})
 
-    	#attr_accessor :mime_file, :mime_file_path, :options, :mime_types
+    	
 
     	@mime_file_path = File.new("/home/sinadino/rails_projects/server-project/spec/fixtures/mime.types", "r")
 
